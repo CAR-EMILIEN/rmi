@@ -1,5 +1,6 @@
 package rmi;
 
+import java.net.InetAddress;
 import java.rmi.Naming;
 
 public class client {
@@ -7,12 +8,14 @@ public class client {
 	
 	public static void main(String args[]) {
 		try {
-			// Récupération d'un proxy sur l'objet
+			String name = "rmi://" + InetAddress.getLocalHost().getHostAddress() + "/Node_"+args[0];
+			// Recuperation d'un proxy sur l'objet
 			SiteItf obj =
-					(SiteImpl) Naming.lookup("//machine/HelloServer");
-			// Appel d'une méthode sur l'objet distant
-			String message = obj.sendMsg("toto");
-			System.out.println(message);
+					(SiteItf) Naming.lookup(name);
+		// Appel d'une methode sur l'objet distant
+			obj.sendMsg("toto");
+			System.out.println("toto");
+			Naming.rebind(name, obj);
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
